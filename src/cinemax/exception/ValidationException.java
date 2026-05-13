@@ -2,7 +2,7 @@ package exception;
 
 import model.ValidationError;
 
-public class ValidationException extends Exception {
+public final class ValidationException extends Exception {
         private final ValidationError error;
 
         public ValidationException(ValidationError error) {
