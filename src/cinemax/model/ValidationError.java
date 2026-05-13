@@ -6,7 +6,8 @@ public enum ValidationError {
         FILM_TITLE_EMPTY( "error.film.title.empty" ),
         FILM_YEAR_INVALID( "error.film.year.invalid", 1850, 2100 ),
         FILM_LENGTH_NEGATIVE( "error.film.length.negative" ),
-        FILM_MIN_AGE_NEGATIVE( "error.film.minAge.negative" );
+        FILM_MIN_AGE_NEGATIVE( "error.film.minAge.negative" ),
+        FILM_PRICE_NEGATIVE( "error.film.price.negative" );
 
         private final String msgKey;
         private final Object[] params;
