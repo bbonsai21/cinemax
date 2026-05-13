@@ -22,9 +22,8 @@ public final class SeatMap {
          */
         public record Seat( int row, int col ) {}
 
-        private SeatMap() {
-                map = new byte[ ( totalSeats + 7 ) / 8 ];
-        }
+        private SeatMap()
+        { map = new byte[ ( totalSeats + 7 ) / 8 ]; }
 
         /**
          * Returns an internal unique static representation object of the cinema map.
