@@ -5,7 +5,7 @@ public class Film {
         public final String name;
         public final int year, length, minAge;
 
-        Film( String name, int year, int length, int minAge ) throws ValidationException {
+        Film( String name, int year, int length, int minAge, String director ) throws ValidationException {
                 if ( name == null || name.isBlank() )
                         throw new ValidationException( ValidationError.FILM_TITLE_EMPTY );
 
@@ -16,6 +16,9 @@ public class Film {
                 if ( length < 0 ) throw new ValidationException( ValidationError.FILM_LENGTH_NEGATIVE );
 
                 if ( minAge < 0 ) throw new ValidationException( ValidationError.FILM_MIN_AGE_NEGATIVE );
+
+                if ( director == null || director.isBlank() )
+                        throw new ValidationException( ValidationError.FILM_DIRECTOR_NAME_EMPTY );
 
                 this.name = name;
                 this.year = year;
