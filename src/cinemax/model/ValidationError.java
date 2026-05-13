@@ -4,10 +4,16 @@ import java.util.Objects;
 
 public enum ValidationError {
         FILM_TITLE_EMPTY( "error.film.title.empty" ),
+        FILM_DIRECTOR_NAME_EMPTY( "error.film.directorName.empty" ),
         FILM_YEAR_INVALID( "error.film.year.invalid", 1850, 2100 ),
         FILM_LENGTH_NEGATIVE( "error.film.length.negative" ),
         FILM_MIN_AGE_NEGATIVE( "error.film.minAge.negative" ),
-        FILM_PRICE_NEGATIVE( "error.film.price.negative" );
+        FILM_PRICE_NEGATIVE( "error.film.price.negative" ),
+        
+        SEATMAP_INVALID_ROW( "error.seatMap.invalidRow", 0, SeatMap.getRows() ),
+        SEATMAP_INVALID_COL( "error.seatMap.invalidCol", 0, SeatMap.getCols() ),
+        SEATMAP_INVALID_SEAT( "error.seatMap.invalidSeat", 0, SeatMap.getTotalSeats() ),
+        SEATMAP_UNAVAILABLE_SEAT( "error.seatMap.unavailableSeat" );
 
         private final String msgKey;
         private final Object[] params;
