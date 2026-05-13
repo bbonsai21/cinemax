@@ -22,4 +22,9 @@ public class Film {
                 this.length = length;
                 this.minAge = minAge;
         }
+
+        @Override
+        public String toString() {
+                return this.name + "( " + this.year + ")";
+        }
 }
