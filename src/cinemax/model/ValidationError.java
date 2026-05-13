@@ -12,7 +12,7 @@ public enum ValidationError {
         
         SEATMAP_INVALID_ROW( "error.seatMap.invalidRow", 0, SeatMap.getRows() ),
         SEATMAP_INVALID_COL( "error.seatMap.invalidCol", 0, SeatMap.getCols() ),
-        SEATMAP_INVALID_SEAT( "error.seatMap.invalidSeat", 0, SeatMap.getTotalSeats() ),
+        SEATMAP_INVALID_SEAT( "error.seatMap.invalidSeat" ),
         SEATMAP_UNAVAILABLE_SEAT( "error.seatMap.unavailableSeat" );
 
         private final String msgKey;
