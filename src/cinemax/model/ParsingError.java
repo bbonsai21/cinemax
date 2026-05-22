@@ -21,7 +21,7 @@ public enum ParsingError {
                 this.params = params;
         }
         
-        public String getMessageKey()
+        public String getMsgKey()
         { return this.msgKey; }
 
         public Object[] getParams() 
