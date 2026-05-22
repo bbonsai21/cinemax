@@ -3,14 +3,13 @@
 A screening and booking management application for small cinemas, written entirely in Java.
 
 ## Repository Structure
-cinemax/
-├── authors.txt  (not included in the GitHub repo for privacy reasons)
-├── README.txt
-├── src/        source code
-├── bin/        .jar and native executables
-├── data/       CSV data files
-├── doc/        manuals and JavaDoc
-└── lib/        external libraries (if any)
+authors.txt  (not included in the GitHub repo for privacy reasons)
+README.txt
+src/        source code
+bin/        .jar and native executables
+data/       CSV data files
+doc/        manuals and JavaDoc
+lib/        external libraries (if any)
 
 ## Requirements
 
@@ -114,14 +113,13 @@ bin\CineMax.exe
 Un'applicazione di gestione proiezioni e prenotazioni per piccoli cinema, scritta interamente in Java.
 
 ## Struttura del repository
-cinemax/
-├── autori.txt  (non presente nella repo Github per privacy)
-├── README.txt
-├── src/        codice sorgente
-├── bin/        eseguibile .jar e nativi
-├── data/       file di dati CSV
-├── doc/        manuali e JavaDoc
-└── lib/        librerie esterne (se presenti)
+authors.txt  (not incluso nel Github per ragioni di privacy)
+README.txt
+src/        codice sorgente
+bin/        .jar ed eseguibili nativi
+data/       dati CSV e file
+doc/        manuali e documentazione javadoc
+lib/        librerie esterne (se presenti)
 
 ## Requisiti
 
