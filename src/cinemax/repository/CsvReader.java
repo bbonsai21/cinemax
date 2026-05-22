@@ -10,10 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import exception.ValidationException;
-import model.ValidationError;
+import exception.ParsingException;
+import model.ParsingError;
 
 public final class CsvReader {
         private static CsvReader self;
@@ -37,25 +38,27 @@ public final class CsvReader {
 
 	/**
 	 * Processes the file from the set path with the set processor. Uses UTF-8 as standard charset.
-	 * @throws ValidationException
+	 * @throws ParsingException
 	 * @see #setPath(String)
 	 * @see #setProcessor(CsvProcessor)
 	 */
-	public void process() throws ValidationException
+	public boolean process() throws ParsingException
 	{
 		// UTF-8 will suffice, even with movie names using non-latin alphabet letters
 		try( Stream<String> lines = Files.lines( Paths.get( path ), StandardCharsets.UTF_8 ) )
 		{
-			lines.skip( 1 )
-				.forEach( line -> processor.Process( line ) );
+			Optional<String> result = lines.filter( line -> processor.process( line ) )
+							.findFirst();
+
+			return result.isPresent();
 		} catch (IOException e)
 		{
 			switch (e) {
-				case FileNotFoundException fnfe -> throw new ValidationException( ValidationError.CSVPARSER_FILE_INVALID );
-				case EOFException eofe -> throw new ValidationException( ValidationError.CSVPARSER_FILE_EOF );
-				case CharacterCodingException cce -> throw new ValidationException( ValidationError.CSVPARSER_FILE_CHARCODING_INVALID );
-				case CharConversionException ccex -> throw new ValidationException( ValidationError.CSVPARSER_FILE_CHARCONVERSION_INVALID );
-				default -> throw new ValidationException( ValidationError.CSVPARSER_IOEXCEPTION );
+				case FileNotFoundException _ -> throw new ParsingException( ParsingError.CSVPARSER_FILE_INVALID );
+				case EOFException _ -> throw new ParsingException( ParsingError.CSVPARSER_FILE_EOF );
+				case CharacterCodingException _ -> throw new ParsingException( ParsingError.CSVPARSER_FILE_CHARCODING_INVALID );
+				case CharConversionException _ -> throw new ParsingException( ParsingError.CSVPARSER_FILE_CHARCONVERSION_INVALID );
+				default -> throw new ParsingException( ParsingError.CSVPARSER_IOEXCEPTION );
 			}
 		}
 	}
