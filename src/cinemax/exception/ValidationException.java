@@ -6,7 +6,7 @@ public final class ValidationException extends Exception {
         private final ValidationError error;
 
         public ValidationException(ValidationError error) {
-                super( ValidationError.getMessageKey( error ) );
+                super( ValidationError.getMsgKey( error ) );
 
                 this.error = error;
         }

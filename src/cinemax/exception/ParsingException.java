@@ -6,7 +6,7 @@ public final class ParsingException extends Exception {
         private final ParsingError error;
 
         public ParsingException( ParsingError error ) {
-                super( error.getMessageKey() );
+                super( error.getMsgKey() );
 
                 this.error = error;
         }
