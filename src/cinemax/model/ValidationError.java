@@ -13,7 +13,15 @@ public enum ValidationError {
         SEATMAP_INVALID_ROW( "error.seatMap.invalidRow", 0, SeatMap.getRows() ),
         SEATMAP_INVALID_COL( "error.seatMap.invalidCol", 0, SeatMap.getCols() ),
         SEATMAP_INVALID_SEAT( "error.seatMap.invalidSeat" ),
-        SEATMAP_UNAVAILABLE_SEAT( "error.seatMap.unavailableSeat" );
+        SEATMAP_UNAVAILABLE_SEAT( "error.seatMap.unavailableSeat" ),
+	
+	CSVPARSER_FILE_INVALID( "csvparser.file.invalid" ),
+	CSVPARSER_FILE_EOF( "csvparser.file.eof" ),
+	CSVPARSER_FILE_CHARCODING_INVALID( "csvparser.file.charcoding.invalid" ),
+	CSVPARSER_FILE_CHARCONVERSION_INVALID( "csvparser.file.charconversion.invalid" ),
+	// generic error
+	CSVPARSER_IOEXCEPTION( "csvparser.file.ioexception" ),
+	;
 
         private final String msgKey;
         private final Object[] params;
