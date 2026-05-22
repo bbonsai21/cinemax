@@ -66,8 +66,20 @@ public final class SeatMap {
          * @param row index of the row to free in the byte array
          * @param col index of the column to free in the byte array
          */
-        public void freeSeat( int row, int col ) {
-                // TODO
+        public void freeSeat( int row, int col ) throws ValidationException {
+                if ( row < 0 || row >= rows )
+                        throw new ValidationException( ValidationError.SEATMAP_INVALID_ROW );
+
+                if ( col < 0 || col >= cols )
+                        throw new ValidationException( ValidationError.SEATMAP_INVALID_COL );
+
+                int seatIndex = row * cols + col;
+                int byteIndex = seatIndex / 8;
+                int bitIndex = seatIndex % 8;
+
+                byte mask = ( byte )( 0 << ( 7 - bitIndex ) );
+
+                map[ byteIndex ] &= mask;
         }
 
         public static int getRows()
