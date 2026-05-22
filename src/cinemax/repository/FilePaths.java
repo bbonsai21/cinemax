@@ -2,7 +2,8 @@ package repository;
 
 public enum FilePaths {
 	PROJECTIONS( "data/proiezioni.csv" ),
-	USERS( "data/users.csv" );
+	USERS( "data/users.csv" ),
+	USER_BOOKINGS( "data/user_bookings.csv" );
 
 	private String path;
 	
