@@ -51,7 +51,7 @@ public final class SeatMap {
 
                 int seatIndex = row * cols + col;
                 int byteIndex = seatIndex / 8;
-                int bitIndex = byteIndex % 8;
+                int bitIndex = seatIndex % 8;
 
                 byte mask = ( byte )( 1 << ( 7 - bitIndex ) );
 
