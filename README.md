@@ -4,11 +4,17 @@ A screening and booking management application for small cinemas, written entire
 
 ## Repository Structure
 authors.txt  (not included in the GitHub repo for privacy reasons)
+
 README.txt
+
 src/        source code
+
 bin/        .jar and native executables
+
 data/       CSV data files
+
 doc/        manuals and JavaDoc
+
 lib/        external libraries (if any)
 
 ## Requirements
@@ -115,10 +121,15 @@ Un'applicazione di gestione proiezioni e prenotazioni per piccoli cinema, scritt
 ## Struttura del repository
 authors.txt  (not incluso nel Github per ragioni di privacy)
 README.txt
+
 src/        codice sorgente
+
 bin/        .jar ed eseguibili nativi
+
 data/       dati CSV e file
+
 doc/        manuali e documentazione javadoc
+
 lib/        librerie esterne (se presenti)
 
 ## Requisiti
