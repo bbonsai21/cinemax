@@ -24,9 +24,9 @@ public final class CsvReader {
 
         /**
          * Creates and returns a unique static new CsvParser object instance.
-         * @return CsvParser object instance. instance.
+         * @return CsvReader object instance.
          */
-        public static CsvReader init() throws IOException {
+        public static CsvReader init() {
                 if ( self != null ) return self;
 
                 self = new CsvReader();
