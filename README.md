@@ -1,3 +1,6 @@
+# Warning: project not complete. The following operations will not produce a useful result.
+
+
 # CineMax - EN
 
 A screening and booking management application for small cinemas, written entirely in Java.
