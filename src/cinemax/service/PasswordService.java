@@ -30,10 +30,11 @@ public class PasswordService {
 	}
 
 	/**
-	 * Returns the hashed password, containing also the hash, in itself.
+	 * Returns the hashed password, containing also the salt, in itself.
 	 * @param password plain text to hash
 	 * @param salt
 	 * @return String hashed password
+	 * @see #getHash(String)
 	 */
 	public static String getHash( String password, String salt )
 	{
@@ -54,6 +55,12 @@ public class PasswordService {
 		return Integer.toString( iterations ) + ":" + Base64.getEncoder().encodeToString( hash ) + ":" + salt;
 	}
 
+	/**
+	 * Returns the hashed password.
+	 * @param password plain text to hash
+	 * @return String
+	 * @see #getHash(String, String)
+	 */
 	public static String getHash( String password )
 	{
 		return getHash( password, getSalt() );
