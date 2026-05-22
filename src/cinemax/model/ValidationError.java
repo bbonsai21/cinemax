@@ -28,7 +28,7 @@ public enum ValidationError {
                 this.params = params;
         }
 
-        public static String getMessageKey( ValidationError error ) {
+        public static String getMsgKey( ValidationError error ) {
                 Objects.nonNull( error );
 
                 return error.msgKey;
