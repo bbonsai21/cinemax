@@ -13,4 +13,8 @@ public class GuestMenu extends UserMenu {
         
         return entries;
     }
+
+    public void show() {
+
+    }
 }

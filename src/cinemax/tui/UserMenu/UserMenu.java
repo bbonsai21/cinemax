@@ -12,4 +12,6 @@ public abstract class UserMenu {
     }
 
     protected abstract ArrayList<MenuEntry> buildEntries();
+
+    public abstract void show();
 }

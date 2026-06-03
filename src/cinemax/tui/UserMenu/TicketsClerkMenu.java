@@ -13,4 +13,8 @@ public class TicketsClerkMenu extends UserMenu  {
         
         return entries;
     }
+
+    public void show() {
+
+    }
 }

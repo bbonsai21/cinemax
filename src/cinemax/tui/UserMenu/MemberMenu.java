@@ -13,4 +13,8 @@ public class MemberMenu extends UserMenu  {
         
         return entries;
     }
+
+    public void show() {
+
+    }
 }
