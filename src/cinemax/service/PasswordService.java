@@ -66,6 +66,12 @@ public class PasswordService {
 		return getHash( password, getSalt() );
 	}
 
+	/**
+	 * Returns whether the provided plain text string matches the hash
+	 * @param plainText password in plain text
+	 * @param hash the hash against which to compare
+	 * @return boolean
+	 */
 	public static boolean compareStringToHash( String plainText, String hash )
 	{
 		String salt = hash.split( ":" )[2];
