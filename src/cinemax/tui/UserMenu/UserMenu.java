@@ -8,8 +8,8 @@ public abstract class UserMenu {
     protected ArrayList<MenuEntry> entries;
     
     protected UserMenu() {
-        if ( entries == null ) {
-            entries = new ArrayList<MenuEntry>();
-        }
+        entries = buildEntries();
     }
+
+    protected abstract ArrayList<MenuEntry> buildEntries();
 }
