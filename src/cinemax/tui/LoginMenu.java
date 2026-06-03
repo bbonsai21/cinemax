@@ -1,6 +1,5 @@
 package tui;
 
-import service.AuthService;
 import tui.UserMenu.GuestMenu;
 
 public class LoginMenu {
