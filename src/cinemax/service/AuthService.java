@@ -56,32 +56,32 @@ public final class AuthService {
 
 			return false;
 		}
+	}
 
-		public static boolean login(String username, String password) {
-			Objects.requireNonNull(username);
-			Objects.requireNonNull(password);
+	public static boolean login(String username, String password) {
+		Objects.requireNonNull(username);
+		Objects.requireNonNull(password);
 
-			CsvReader csvReader = CsvReader.init();
-			csvReader.setPath(FilePaths.USERS.getPath());
+		CsvReader csvReader = CsvReader.init();
+		csvReader.setPath(FilePaths.USERS.getPath());
 
-			AccessAuth retriever = self.new AccessAuth(username, password);
+		AccessAuth retriever = self.new AccessAuth(username, password);
 
-			csvReader.setProcessor(retriever);
+		csvReader.setProcessor(retriever);
 
-			try {
-				boolean result = csvReader.process();
-				return result;
-			} catch (ParsingException e) {
-				return false;
-			}
+		try {
+			boolean result = csvReader.process();
+			return result;
+		} catch (ParsingException e) {
+			return false;
 		}
+	}
 
-		public void logout() {
-			user = new Guest();
-		}
+	public void logout() {
+		user = new Guest();
+	}
 
-		public User getUser() {
-			return user;
-		}
+	public User getUser() {
+		return user;
 	}
 }
