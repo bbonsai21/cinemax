@@ -10,20 +10,20 @@ import repository.CsvReader;
 import repository.FilePaths;
 
 /**
- * Class dedicated to authenticating users and ensuring that maximum 1 authenticated user exists at all times.
+ * Class dedicated to authenticating users and ensuring that maximum 1
+ * authenticated user exists at all times.
  */
 public final class AuthService {
 	private static User user;
 	private static AuthService self;
 
-	private AuthService()
-	{
+	private AuthService() {
 		user = new Guest();
 	}
 
-	public static AuthService init()
-	{
-		if ( self != null ) return self;
+	public static AuthService init() {
+		if (self != null)
+			return self;
 
 		self = new AuthService();
 		return self;
@@ -32,8 +32,8 @@ public final class AuthService {
 	public class AccessAuth implements CsvProcessor {
 		private String usernameMatch, plainPass;
 		public boolean processing;
-		
-		private AccessAuth( String userMatch, String plainPass ) {
+
+		private AccessAuth(String userMatch, String plainPass) {
 			this.usernameMatch = userMatch;
 			this.plainPass = plainPass;
 			processing = true;
@@ -41,43 +41,47 @@ public final class AuthService {
 
 		// file format: username, hashedPsswd, psswdSalt
 		@Override
-		public boolean process( String line ) {
-			String[] sub = line.split( "," );
-			
-			if ( sub.length < 3 ) return false;
+		public boolean process(String line) {
+			String[] sub = line.split(",");
 
-			if ( this.usernameMatch.equals( sub[0] ) ) {
-				String hashedPass = PasswordService.getHash( this.plainPass, sub[2] );
-				
-				if ( hashedPass.equals( sub[1] ) ) return true;
-			
+			if (sub.length < 3)
+				return false;
+
+			if (this.usernameMatch.equals(sub[0])) {
+				String hashedPass = PasswordService.getHash(this.plainPass, sub[2]);
+
+				if (hashedPass.equals(sub[1]))
+					return true;
+			}
+
 			return false;
 		}
-	}
 
-	public static boolean login( String username, String password )
-	{
-		Objects.requireNonNull( username );
-		Objects.requireNonNull( password );
-		
-		CsvReader csvReader = CsvReader.init();
-		csvReader.setPath( FilePaths.USERS.getPath() );
+		public static boolean login(String username, String password) {
+			Objects.requireNonNull(username);
+			Objects.requireNonNull(password);
 
-		AccessAuth retriever = self.new AccessAuth( username, password  );
+			CsvReader csvReader = CsvReader.init();
+			csvReader.setPath(FilePaths.USERS.getPath());
 
-		csvReader.setProcessor( retriever);		
+			AccessAuth retriever = self.new AccessAuth(username, password);
 
-		try {
-			boolean result = csvReader.process();
-			return result;
-		} catch( ParsingException e ) {
-			return false;
+			csvReader.setProcessor(retriever);
+
+			try {
+				boolean result = csvReader.process();
+				return result;
+			} catch (ParsingException e) {
+				return false;
+			}
+		}
+
+		public void logout() {
+			user = new Guest();
+		}
+
+		public User getUser() {
+			return user;
 		}
 	}
-
-	public void logout()
-	{ user = new Guest(); }
-
-	public User getUser()
-	{ return user; }
 }
