@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import tui.MenuEntry;
 
 public abstract class UserMenu {
-    protected ArrayList<MenuEntry> entries;
+    protected final ArrayList<MenuEntry> entries;
     
     protected UserMenu() {
         entries = buildEntries();
