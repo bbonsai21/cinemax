@@ -14,7 +14,7 @@ public class ProjectionistMenu extends UserMenu {
         return entries;
     }
 
-    public void show() {
+    public void run() {
 
     }
 }
