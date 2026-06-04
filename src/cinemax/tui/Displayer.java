@@ -162,6 +162,20 @@ public final class Displayer {
     }
 
     /**
+     * Prints a numbered meny entry, without i18n. Index starts from 1.
+     * 
+     * @param index display number, must be positive
+     * @param str   non-null string to display
+     */
+    public static void rawMenuEntry(int index, String str) {
+        if (index < 1)
+            throw new IllegalArgumentException("index must be positive");
+        Objects.requireNonNull(str);
+
+        System.out.printf("  %2d.  %s%n", index, str);
+    }
+
+    /**
      * Prints a two-column key-value row, used for projection and booking details.
      * The key is right-padded to align values consistently.
      * 
