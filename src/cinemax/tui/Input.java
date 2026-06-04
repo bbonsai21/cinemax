@@ -28,7 +28,7 @@ public enum Input {
 
         while (true) {
             IntStream.range(0, entries.size())
-                    .forEach(i -> Displayer.menuEntry(i + 1, entries.get(i).labelKey()));
+                    .forEach(i -> Displayer.rawMenuEntry(i + 1, entries.get(i).labelKey()));
 
             String raw = scanner.nextLine().trim();
 
@@ -36,9 +36,9 @@ public enum Input {
                 int choice = Integer.parseInt(raw);
                 if (choice >= 1 && choice <= entries.size())
                     return entries.get(choice - 1);
-                Displayer.error(Message.get("error.input.OutOfRange"));
+                Displayer.error("Input is out of range! Must be between 1 and " + (entries.size()) + ".");
             } catch (NumberFormatException e) {
-                Displayer.error(Message.get("error.input.NaN"));
+                Displayer.error("Input must be a number!");
             }
         }
     }
