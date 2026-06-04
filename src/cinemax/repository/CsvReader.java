@@ -16,10 +16,13 @@ import java.util.stream.Stream;
 import exception.ParsingException;
 import model.ParsingError;
 
+/**
+ * Parser class for .csv files.
+ */
 public final class CsvReader {
         private static CsvReader self;
         private static String path;
-	private static CsvProcessor processor;
+		private static CsvProcessor processor;
 
         private CsvReader() {}
 
