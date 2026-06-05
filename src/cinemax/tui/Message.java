@@ -8,8 +8,9 @@ import java.util.ResourceBundle;
  * i18n string retriever class.
  */
 public final class Message {
+        private static String path = "i18n/messages";
         private static String language = "en";
-        private static ResourceBundle bundle = ResourceBundle.getBundle( "i18n/messages", Locale.ENGLISH );
+        private static ResourceBundle bundle = ResourceBundle.getBundle( path, Locale.of( language ) );
 
         private Message() {}
 
@@ -21,7 +22,7 @@ public final class Message {
                 Objects.requireNonNull( lang );
 
                 language = lang;
-                bundle = ResourceBundle.getBundle( language );
+                bundle = ResourceBundle.getBundle( path, Locale.of( lang ) );
         }
 
         /**
