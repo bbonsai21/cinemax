@@ -29,7 +29,7 @@ public enum Input {
 
         while (true) {
             IntStream.range(0, entries.size())
-                    .forEach(i -> Displayer.rawMenuEntry(i + 1, entries.get(i).labelKey()));
+                    .forEach(i -> Displayer.menuEntry(i + 1, entries.get(i).labelKey()));
 
             String raw = scanner.nextLine().trim();
 
