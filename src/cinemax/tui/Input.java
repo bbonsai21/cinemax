@@ -35,12 +35,12 @@ public enum Input {
 
             try {
                 int choice = Integer.parseInt(raw);
-                
+
                 if (choice >= 1 && choice <= entries.size())
                     return entries.get(choice - 1);
-                Displayer.error("Input is out of range! Must be between 1 and " + (entries.size()) + ".");
+                Displayer.error( Message.get("error.input.outOfRange.specific", 1, entries.size()));
             } catch (NumberFormatException e) {
-                Displayer.error("Input must be a number!");
+                Displayer.error(Message.get("error.input.NaN"));
             }
         }
     }
@@ -48,18 +48,41 @@ public enum Input {
     /**
      * Prompts the user and returns a non-blank string.
      * 
-     * @param promptKey i18n key for the prompt message
+     * @param promptKey prompt message
      * @return trimmed non-blank user input
+     * @see #readSecureLine(String)
      */
     public String readLine(String promptKey) {
         Objects.requireNonNull(promptKey);
 
         while (true) {
-            Displayer.body(Message.get(promptKey));
+            Displayer.body(promptKey);
+
             String line = scanner.nextLine().trim();
 
             if (!line.isBlank())
                 return line;
+
+            Displayer.error(Message.get("error.input.blank"));
+        }
+    }
+
+    /**
+     * Secure way of reading a string from terminal.
+     * 
+     * @param promptKey prompt message
+     * @return secured string
+     * @see #readLine(String)
+     */
+    public static String readSecureLine(String promptKey) {
+        Objects.requireNonNull(promptKey);
+
+        while (true) {
+            Displayer.body(promptKey);
+
+            char[] charBuff = System.console().readPassword();
+            if (!charBuff.toString().isEmpty())
+                return charBuff.toString();
 
             Displayer.error(Message.get("error.input.blank"));
         }
