@@ -13,21 +13,12 @@ import repository.FilePaths;
  * Class dedicated to authenticating users and ensuring that maximum 1
  * authenticated user exists at all times.
  */
-public final class AuthService {
+public enum AuthService {
+	INSTANCE;
+
 	private static User user = new Guest();
-	private static AuthService self;
 
-	private AuthService() {
-		user = new Guest();
-	}
-
-	public static AuthService init() {
-		if (self != null)
-			return self;
-
-		self = new AuthService();
-		return self;
-	}
+	AuthService() { }
 
 	public class AccessAuth implements CsvProcessor {
 		private String usernameMatch, plainPass;
@@ -65,7 +56,7 @@ public final class AuthService {
 		CsvReader csvReader = CsvReader.init();
 		csvReader.setPath(FilePaths.USERS.getPath());
 
-		AccessAuth retriever = self.new AccessAuth(username, password);
+		AccessAuth retriever = INSTANCE.new AccessAuth(username, password);
 
 		csvReader.setProcessor(retriever);
 
