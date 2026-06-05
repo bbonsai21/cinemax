@@ -26,14 +26,14 @@ public enum MenuDispatcher {
 	 * @param user the user
 	 * @return user menu for the coresponding user
 	 */
-	public UserMenu dispatch(User user) {
+	public void dispatch(User user) {
 		Objects.requireNonNull(user);
 
-		return switch (user) {
-			case Guest g -> new GuestMenu();
-			case Member m -> new MemberMenu();
-			case TicketsClerk t -> new TicketsClerkMenu();
-			case Projectionist p -> new ProjectionistMenu();
+		switch (user) {
+			case Guest g -> new GuestMenu().run();
+			case Member m -> new MemberMenu().run();
+			case TicketsClerk t -> new TicketsClerkMenu().run();
+			case Projectionist p -> new ProjectionistMenu().run();
 		};
 	}
 }
