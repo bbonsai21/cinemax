@@ -1,4 +1,10 @@
+# IGNORE
+
 .vscode
 *.txt
 *.exe
 doc/NOTE
+
+# ALLOW
+
+LICENSE.txt
