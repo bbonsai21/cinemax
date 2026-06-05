@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public enum Input {
     INSTANCE;
 
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     /**
      * Displays the provided entries and returns the chosen one,
@@ -21,7 +21,7 @@ public enum Input {
      * @param entries non-null, non-empty list of menu entries
      * @return the selected MenuEntry
      */
-    public MenuEntry choose(List<MenuEntry> entries) {
+    public static MenuEntry choose(List<MenuEntry> entries) {
         Objects.requireNonNull(entries);
 
         if (entries.isEmpty())
@@ -52,7 +52,7 @@ public enum Input {
      * @return trimmed non-blank user input
      * @see #readSecureLine(String)
      */
-    public String readLine(String promptKey) {
+    public static String readLine(String promptKey) {
         Objects.requireNonNull(promptKey);
 
         while (true) {
@@ -96,7 +96,7 @@ public enum Input {
      * @param max       maximum accepted value inclusive
      * @return integer within [min, max]
      */
-    public int readInt(String promptKey, int min, int max) {
+    public static int readInt(String promptKey, int min, int max) {
         Objects.requireNonNull(promptKey);
 
         while (true) {
@@ -116,11 +116,11 @@ public enum Input {
     /**
      * Expects any input to continue.
      */
-    public void awaitInput() {
+    public static void awaitInput() {
         scanner.nextLine();
     }
 
-    public void close() {
+    public static void close() {
         scanner.close();
     }
 }
