@@ -90,6 +90,13 @@ public enum Input {
         }
     }
 
+    /**
+     * Expects any input to continue.
+     */
+    public void awaitInput() {
+        scanner.nextLine();
+    }
+
     public void close() {
         scanner.close();
     }
