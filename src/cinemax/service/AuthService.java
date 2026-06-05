@@ -3,6 +3,7 @@ package service;
 import java.util.Objects;
 
 import exception.ParsingException;
+import exception.UserNotFoundException;
 import model.user.Guest;
 import model.user.User;
 import repository.CsvProcessor;
@@ -16,7 +17,7 @@ import repository.FilePaths;
 public enum AuthService {
 	INSTANCE;
 
-	private static User user = new Guest();
+	private static User user;
 
 	AuthService() { }
 
@@ -68,7 +69,12 @@ public enum AuthService {
 		}
 	}
 
-	public User getUser() {
+
+	public User getUser() throws UserNotFoundException {
+		// Used to find eventual bugs in the code. User should exist at all times, after assignment in 
+		// classpath root main method
+		if ( user == null ) throw new UserNotFoundException();
+
 		return user;
 	}
 	
