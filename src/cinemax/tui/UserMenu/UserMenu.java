@@ -3,10 +3,9 @@ package tui.UserMenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.LogoutException;
 import service.AuthService;
-import tui.Displayer;
 import tui.Input;
-import tui.LogoutException;
 import tui.MenuEntry;
 import tui.Message;
 
@@ -54,9 +53,7 @@ public abstract class UserMenu implements Runnable {
     }
 
     private void logout() throws LogoutException {
-        var authservice = AuthService.init();
-        authservice.logout();
-
+        AuthService.INSTANCE.logout();
         throw new LogoutException();
     }
 }
