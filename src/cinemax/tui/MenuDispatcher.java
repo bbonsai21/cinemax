@@ -14,8 +14,10 @@ import tui.UserMenu.UserMenu;
 /**
  * Dispatching class for user menus, providing to each one of them the necessary ojbects.
  */
-public class MenuDispatcher {
-	private MenuDispatcher() {
+public enum MenuDispatcher {
+	INSTANCE;
+
+	MenuDispatcher() {
 	}
 
 	/**
