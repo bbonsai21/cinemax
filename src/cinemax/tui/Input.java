@@ -23,6 +23,7 @@ public enum Input {
      */
     public MenuEntry choose(List<MenuEntry> entries) {
         Objects.requireNonNull(entries);
+
         if (entries.isEmpty())
             throw new IllegalArgumentException("entries cannot be empty");
 
@@ -34,6 +35,7 @@ public enum Input {
 
             try {
                 int choice = Integer.parseInt(raw);
+                
                 if (choice >= 1 && choice <= entries.size())
                     return entries.get(choice - 1);
                 Displayer.error("Input is out of range! Must be between 1 and " + (entries.size()) + ".");
@@ -51,11 +53,14 @@ public enum Input {
      */
     public String readLine(String promptKey) {
         Objects.requireNonNull(promptKey);
+
         while (true) {
             Displayer.body(Message.get(promptKey));
             String line = scanner.nextLine().trim();
+
             if (!line.isBlank())
                 return line;
+
             Displayer.error(Message.get("error.input.blank"));
         }
     }
@@ -70,8 +75,10 @@ public enum Input {
      */
     public int readInt(String promptKey, int min, int max) {
         Objects.requireNonNull(promptKey);
+
         while (true) {
             String raw = readLine(promptKey);
+
             try {
                 int value = Integer.parseInt(raw);
                 if (value >= min && value <= max)
