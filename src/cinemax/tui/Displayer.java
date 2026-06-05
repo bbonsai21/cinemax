@@ -1,5 +1,6 @@
 package tui;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -205,5 +206,25 @@ public final class Displayer {
         int padding = width - text.length();
 
         return " ".repeat(padding) + text;
+    }
+
+    /**
+     * Forces screen cleaning.
+     */
+    public static void cleanScreen() {
+        var processBuilder = new ProcessBuilder();
+
+        String os = System.getProperty( "os.name" );
+        boolean isBashTerminal = processBuilder.environment().containsKey( "PS1" );
+        
+        try {
+            if ( os.toLowerCase().contains( "win" ) && !isBashTerminal ) {
+                new ProcessBuilder( "cmd", "/c", "cls" ).inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder( "clear" ).inheritIO().start().waitFor();
+            }
+        } catch( Exception e ) {
+            for ( short i = 0; i < 30; i++ ) IO.println();
+        }
     }
 }
