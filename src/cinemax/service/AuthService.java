@@ -14,7 +14,7 @@ import repository.FilePaths;
  * authenticated user exists at all times.
  */
 public final class AuthService {
-	private static User user;
+	private static User user = new Guest();
 	private static AuthService self;
 
 	private AuthService() {
@@ -77,11 +77,15 @@ public final class AuthService {
 		}
 	}
 
-	public void logout() {
-		user = new Guest();
-	}
-
 	public User getUser() {
 		return user;
+	}
+	
+	public void setUser( User newUser ) {
+		user = newUser;
+	}
+
+	public void logout() {
+		user = new Guest();
 	}
 }
