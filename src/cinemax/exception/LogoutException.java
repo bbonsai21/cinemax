@@ -1,4 +1,4 @@
-package tui;
+package exception;
 
 /**
  * Exception thrown to easily manage the user menu flow, and log the user out.
