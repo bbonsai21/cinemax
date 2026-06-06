@@ -5,10 +5,11 @@ public record SignupValidation(
         boolean passwordLongEnough,
         boolean passwordHasUppercase,
         boolean passwordHasDigit,
-        boolean passwordHasSpecial) {
+        boolean passwordHasSpecial,
+        boolean passwordOnlyAllowedSpecial) {
     public boolean isValid() {
         return usernameAvailable && passwordLongEnough
                 && passwordHasUppercase && passwordHasDigit
-                && passwordHasSpecial;
+                && passwordHasSpecial && passwordOnlyAllowedSpecial;
     }
 }
