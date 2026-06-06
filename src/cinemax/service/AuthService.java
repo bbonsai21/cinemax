@@ -1,5 +1,7 @@
-package service;
+// package service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import exception.ParsingException;
@@ -21,7 +23,7 @@ public enum AuthService {
 
 	AuthService() { }
 
-	public class AccessAuth implements CsvProcessor {
+	public final class AccessAuth implements CsvProcessor {
 		private String usernameMatch, plainPass;
 		public boolean processing;
 
@@ -31,38 +33,74 @@ public enum AuthService {
 			processing = true;
 		}
 
-		// file format: username, hashedPsswd, psswdSalt
+		// file format: username, iterations:hashedPsswd:hashSalt, name, surname, dateOfBirth, domicile, role
 		@Override
 		public boolean process(String line) {
 			String[] sub = line.split(",");
 
-			if (sub.length < 3)
+			if (sub.length < 7)
 				return false;
 
 			if (this.usernameMatch.equals(sub[0])) {
-				String hashedPass = PasswordService.getHash(this.plainPass, sub[2]);
-
-				if (hashedPass.equals(sub[1]))
-					return true;
+				PasswordService.compareStringToHash( plainPass, sub[0] );
 			}
 
 			return false;
 		}
 	}
 
+	public final class SignupProcessor implements CsvProcessor {
+		public boolean processing;
+
+		SignupProcessor( String username ) {
+
+		}
+
+		@Override
+		public boolean process(String line) {
+			String[] sub = line.split( "," );
+			// TODO
+			return false;
+		}
+		
+	}
+
+	private record SignupResult( boolean success, boolean usernameExists, ArrayList<String> passwordConditions ) {}
+	public static SignupResult signup( String username, String password ) {
+		Objects.requireNonNull(username);
+		Objects.requireNonNull(password);
+
+		final var NOT_OK = "[ X ]";
+
+		var success = false;
+		var usernameExists = false;
+		ArrayList<String> passwordConditions = new ArrayList<>(List.of(
+			
+		));
+		var result = new SignupResult(false, false, null);
+		
+		try
+		{
+			CsvReader.INSTANCE.setProcessor( AuthService.INSTANCE.new SignupProcessor() );
+			CsvReader.INSTANCE.process( FilePaths.USERS.getPath() );
+		}
+		catch ( ParsingException e ) {
+			success = false;
+		}
+
+		return result;
+	}
+
 	public static boolean login(String username, String password) {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
-		CsvReader csvReader = CsvReader.init();
-		csvReader.setPath(FilePaths.USERS.getPath());
-
 		AccessAuth retriever = INSTANCE.new AccessAuth(username, password);
 
-		csvReader.setProcessor(retriever);
+		CsvReader.INSTANCE.setProcessor(retriever);
 
 		try {
-			boolean result = csvReader.process();
+			boolean result = CsvReader.INSTANCE.process( FilePaths.USERS.getPath() );
 			return result;
 		} catch (ParsingException e) {
 			return false;
@@ -82,6 +120,9 @@ public enum AuthService {
 		user = newUser;
 	}
 
+	/**
+	 * Equivalent to setUser( new Guest() ).
+	 */
 	public void logout() {
 		user = new Guest();
 	}
