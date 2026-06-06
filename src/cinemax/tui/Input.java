@@ -81,8 +81,9 @@ public enum Input {
             Displayer.body(promptKey);
 
             char[] charBuff = System.console().readPassword();
-            if (!charBuff.toString().isEmpty())
-                return charBuff.toString();
+            String str = new String(charBuff);
+            if (!str.isEmpty())
+                return str;
 
             Displayer.error(Message.get("error.input.blank"));
         }
