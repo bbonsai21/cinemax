@@ -82,6 +82,7 @@ public enum Input {
 
             char[] charBuff = System.console().readPassword();
             String str = new String(charBuff);
+            java.util.Arrays.fill( charBuff , '\0');
             if (!str.isEmpty())
                 return str;
 
