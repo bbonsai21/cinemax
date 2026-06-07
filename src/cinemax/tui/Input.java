@@ -74,7 +74,7 @@ public enum Input {
      * @return secured string
      * @see #readLine(String)
      */
-    public static String readSecureLine(String promptKey) {
+    public static char[] readSecureLine(String promptKey) {
         Objects.requireNonNull(promptKey);
 
         while (true) {
@@ -82,9 +82,8 @@ public enum Input {
 
             char[] charBuff = System.console().readPassword();
             String str = new String(charBuff);
-            java.util.Arrays.fill( charBuff , '\0');
             if (!str.isEmpty())
-                return str;
+                return charBuff;
 
             Displayer.error(Message.get("error.input.blank"));
         }
