@@ -116,7 +116,7 @@ public enum AuthService {
 	 * @param plainPassword plain text password to validate
 	 * @return object giving infos about validity and availability
 	 */
-	public static SignupValidation validateSignup(String username, String plainPassword) {
+	public static SignupValidation validateSignup(String username, char[] plainPassword) {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(plainPassword);
 
@@ -140,7 +140,7 @@ public enum AuthService {
 			}
 		}
 
-		boolean passwordLength = plainPassword != null && plainPassword.length() >= 7;
+		boolean passwordLength = plainPassword != null && plainPassword.length >= 7;
 		boolean passwordUppercase = false;
 		boolean passwordDigit = false;
 		boolean passwordSpecial = false;
@@ -148,7 +148,7 @@ public enum AuthService {
 
 		String allowedSpecialChars = getAllowedSpecialCharacter();
 
-		for (char c : plainPassword.toCharArray()) {
+		for (char c: plainPassword) {
 			if (Character.isUpperCase(c)) {
 				passwordUppercase = true;
 			} else if (Character.isDigit(c)) {
