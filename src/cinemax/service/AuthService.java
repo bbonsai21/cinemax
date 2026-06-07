@@ -23,10 +23,11 @@ public enum AuthService {
 	}
 
 	private final class AccessAuth implements CsvProcessor {
-		private String usernameMatch, plainPass;
+		private String usernameMatch;
+		private char[] plainPass;
 		public boolean processing;
 
-		private AccessAuth(String userMatch, String plainPass) {
+		private AccessAuth(String userMatch, char[] plainPass) {
 			this.usernameMatch = userMatch;
 			this.plainPass = plainPass;
 			processing = true;
@@ -42,7 +43,7 @@ public enum AuthService {
 				return false;
 
 			if (this.usernameMatch.equals(sub[0])) {
-				return PasswordService.compareStringToHash(plainPass, sub[1]);
+				return PasswordService.compareCharArrToHash(plainPass, sub[1]);
 			}
 
 			return false;
@@ -174,7 +175,7 @@ public enum AuthService {
 				passwordOnlyAllowedSpecial);
 	}
 
-	public static boolean login(String username, String password) {
+	public static boolean login(String username, char[] password) {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
