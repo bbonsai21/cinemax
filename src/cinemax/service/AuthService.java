@@ -1,7 +1,5 @@
-// package service;
+package service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import exception.ParsingException;
@@ -124,7 +122,23 @@ public enum AuthService {
 
 		var nameRetrieverProcessor = INSTANCE.new UsernameRetrieverProcessor(username);
 		CsvReader.INSTANCE.setProcessor(nameRetrieverProcessor);
-		boolean usernameAvailable = !CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
+		boolean usernameAvailable;
+		try {
+			usernameAvailable = !CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
+		} catch (Exception e) {
+			usernameAvailable = false;
+		}
+
+		// first char can't be a number; the rest must be either a letter or a number
+		boolean usernameValid = true;
+		if (Character.isDigit(username.charAt(0)))
+			usernameValid = false;
+		if (usernameValid) {
+			for (char c : username.toCharArray()) {
+				if (!(Character.isDigit(c) || Character.isLetter(c)))
+					usernameValid = false;
+			}
+		}
 
 		boolean passwordLength = plainPassword != null && plainPassword.length() >= 7;
 		boolean passwordUppercase = false;
@@ -152,6 +166,7 @@ public enum AuthService {
 
 		return new SignupValidation(
 				usernameAvailable,
+				usernameValid,
 				passwordLength,
 				passwordUppercase,
 				passwordDigit,
