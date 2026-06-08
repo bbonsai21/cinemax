@@ -131,7 +131,7 @@ public enum AuthService {
 		Objects.requireNonNull(dateOfBirth);
 		Objects.requireNonNull(domicile);
 
-		String lineEntry = String.join(",", username + passHash + name + surname + dateOfBirth + domicile + "Member");
+		String lineEntry = String.join(",", username, passHash, name, surname, dateOfBirth, domicile, "Member");
 
 		try {
 			CsvWriter.INSTANCE.append(FilePaths.USERS.getPath(), lineEntry);
