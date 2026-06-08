@@ -32,7 +32,7 @@ public enum AuthService {
 	/**
 	 * Representation of a login.
 	 */
-	private record LoginResult(boolean successful, String name, String surname, User user) {
+	public record LoginResult(boolean successful, String name, String surname, User user) {
 	}
 
 	private final class AccessAuth implements CsvProcessor {
