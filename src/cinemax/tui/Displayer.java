@@ -1,8 +1,5 @@
 package tui;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -227,6 +224,8 @@ public final class Displayer {
         try {
             String content = Files.readString( Paths.get( path ), StandardCharsets.UTF_8 );
             body( content );
-        } catch ( Exception e ) {}
+        } catch ( Exception e ) {
+            body( failMsg );
+        }
     }
 }
