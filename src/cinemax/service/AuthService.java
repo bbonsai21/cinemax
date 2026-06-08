@@ -3,11 +3,18 @@ package service;
 import java.util.Objects;
 
 import exception.ParsingException;
+import exception.PersistenceException;
 import exception.UserNotFoundException;
+import exception.ValidationException;
+import model.ValidationError;
 import model.user.Guest;
+import model.user.Member;
+import model.user.Projectionist;
+import model.user.TicketsClerk;
 import model.user.User;
 import repository.CsvProcessor;
 import repository.CsvReader;
+import repository.CsvWriter;
 import repository.FilePaths;
 
 /**
@@ -22,10 +29,17 @@ public enum AuthService {
 	AuthService() {
 	}
 
+	/**
+	 * Representation of a login.
+	 */
+	private record LoginResult(boolean successful, String name, String surname, User user) {
+	}
+
 	private final class AccessAuth implements CsvProcessor {
 		private String usernameMatch;
 		private char[] plainPass;
 		public boolean processing;
+		private String retrieved;
 
 		private AccessAuth(String userMatch, char[] plainPass) {
 			this.usernameMatch = userMatch;
@@ -33,37 +47,53 @@ public enum AuthService {
 			processing = true;
 		}
 
-		// file format: username, iterations:hashedPsswd:hashSalt, name, surname,
+		// file format: username, hashedPassword, name, surname,
 		// dateOfBirth, domicile, role
 		@Override
 		public boolean process(String line) {
 			String[] sub = line.split(",");
 
+			// trying to prevent nasty bugs
 			if (sub.length < 7)
 				return false;
 
 			if (this.usernameMatch.equals(sub[0])) {
-				return PasswordService.compareCharArrToHash(plainPass, sub[1]);
+				if (PasswordService.compareCharArrToHash(plainPass, sub[1])) {
+					this.retrieved = line;
+					return true;
+				}
 			}
 
 			return false;
 		}
-	}
 
-	private final class SignupProcessor implements CsvProcessor {
-		public boolean processing;
+		/**
+		 * Tries to create and return a login result, starting from the field retrieved.
+		 * It does not check whether retrieved is safe to access nor valid format.
+		 * Whether a LoginResult object is necessary and the retrieved line isn't
+		 * available, it's deemed opportune to create one manually and assign the field
+		 * *successful* to false. In that case, the other fields should not be accessed
+		 * at all from anywhere, to avoid bugs or exceptions.
+		 * 
+		 * @return LoginResult object
+		 */
+		public LoginResult getLoginResult() {
+			String[] splitLine = this.retrieved.split(",");
+			var name = splitLine[2];
+			var surname = splitLine[3];
+			var role = splitLine[6];
+			User user;
 
-		SignupProcessor(String username) {
+			switch (role) {
+				case "Member" -> user = new Member();
+				case "TicketsClerk" -> user = new TicketsClerk();
+				case "Projectionist" -> user = new Projectionist();
+				default -> user = null; // why would this even happen if everything is done right? I guess because it'd
+										// be done wrong.
+			}
 
+			return new LoginResult(true, name, surname, user);
 		}
-
-		@Override
-		public boolean process(String line) {
-			String[] sub = line.split(",");
-			// TODO
-			return false;
-		}
-
 	}
 
 	private final class UsernameRetrieverProcessor implements CsvProcessor {
@@ -92,14 +122,20 @@ public enum AuthService {
 	 * @param passHash hash of the password of the user
 	 * @return success of the operation
 	 */
-	public static boolean signup(String username, String passHash) {
+	public static boolean signup(String username, String passHash, String name, String surname, String dateOfBirth,
+			String domicile) {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(passHash);
+		Objects.requireNonNull(name);
+		Objects.requireNonNull(surname);
+		Objects.requireNonNull(dateOfBirth);
+		Objects.requireNonNull(domicile);
+
+		String lineEntry = String.join(",", username + passHash + name + surname + dateOfBirth + domicile + "Member");
 
 		try {
-			CsvReader.INSTANCE.setProcessor(INSTANCE.new SignupProcessor(username));
-			CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
-		} catch (ParsingException e) {
+			CsvWriter.INSTANCE.append(FilePaths.USERS.getPath(), lineEntry);
+		} catch (PersistenceException e) {
 			return false;
 		}
 
@@ -117,17 +153,17 @@ public enum AuthService {
 	 * @param plainPassword plain text password to validate
 	 * @return object giving infos about validity and availability
 	 */
-	public static SignupValidation validateSignup(String username, char[] plainPassword) {
+	public static SignupValidation validateSignup(String username, char[] plainPassword) throws ValidationException {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(plainPassword);
 
+		boolean usernameAvailable;
 		var nameRetrieverProcessor = INSTANCE.new UsernameRetrieverProcessor(username);
 		CsvReader.INSTANCE.setProcessor(nameRetrieverProcessor);
-		boolean usernameAvailable;
 		try {
 			usernameAvailable = !CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
 		} catch (Exception e) {
-			usernameAvailable = false;
+			throw new ValidationException(ValidationError.USER_DATABASE_LOOKUP_FAILED);
 		}
 
 		// first char can't be a number; the rest must be either a letter or a number
@@ -149,20 +185,27 @@ public enum AuthService {
 
 		String allowedSpecialChars = getAllowedSpecialCharacter();
 
-		for (char c: plainPassword) {
-			if (Character.isUpperCase(c)) {
-				passwordUppercase = true;
-			} else if (Character.isDigit(c)) {
-				passwordDigit = true;
+		for (char c : plainPassword) {
+			if (Character.isLetter(c)) {
+				if (Character.isUpperCase(c)) {
+					passwordUppercase = true;
+					continue;
+				}
+
+				continue;
 			}
 
-			if (c < 'A' || c > 'z') {
-				if (!(allowedSpecialChars.indexOf(c) >= 0))
-					passwordOnlyAllowedSpecial = false;
-				else {
-					passwordSpecial = true;
-				}
+			if (Character.isDigit(c)) {
+				passwordDigit = true;
+				continue;
 			}
+
+			if (!(allowedSpecialChars.indexOf(c) >= 0)) {
+				passwordOnlyAllowedSpecial = false;
+				continue;
+			}
+
+			passwordSpecial = true;
 		}
 
 		return new SignupValidation(
@@ -175,7 +218,16 @@ public enum AuthService {
 				passwordOnlyAllowedSpecial);
 	}
 
-	public static boolean login(String username, char[] password) {
+	/**
+	 * Tries to complete a user login. Returns the representation of the login
+	 * resultance.
+	 * 
+	 * @param username username of the user
+	 * @param password password array
+	 * @return LoginResult object representing the status of the login. If
+	 *         successful is false, other fields should not be accessed.
+	 */
+	public static LoginResult login(String username, char[] password) {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
@@ -184,10 +236,14 @@ public enum AuthService {
 		CsvReader.INSTANCE.setProcessor(retriever);
 
 		try {
-			boolean result = CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
-			return result;
+			boolean success = CsvReader.INSTANCE.process(FilePaths.USERS.getPath());
+			if (success) {
+				return retriever.getLoginResult();
+			}
+
+			return new LoginResult(false, null, null, null);
 		} catch (ParsingException e) {
-			return false;
+			return new LoginResult(false, null, null, null);
 		}
 	}
 
