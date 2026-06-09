@@ -10,6 +10,6 @@ public enum Cleanup {
     
     public void run()
     {
-        Input.INSTANCE.close();
+        Input.close();
     }
 }

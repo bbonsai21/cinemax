@@ -79,15 +79,17 @@ public enum AuthService {
 		 */
 		public LoginResult getLoginResult() {
 			String[] splitLine = this.retrieved.split(",");
+			var username = splitLine[0];
 			var name = splitLine[2];
 			var surname = splitLine[3];
+			var domicile = splitLine[5];
 			var role = splitLine[6];
 			User user;
 
 			switch (role) {
-				case "Member" -> user = new Member();
-				case "TicketsClerk" -> user = new TicketsClerk();
-				case "Projectionist" -> user = new Projectionist();
+				case "Member" -> user = new Member(username, name, surname, domicile);
+				case "TicketsClerk" -> user = new TicketsClerk(username, name, surname, domicile);
+				case "Projectionist" -> user = new Projectionist(username, name, surname, domicile);
 				default -> user = null; // why would this even happen if everything is done right? I guess because it'd
 										// be done wrong.
 			}
