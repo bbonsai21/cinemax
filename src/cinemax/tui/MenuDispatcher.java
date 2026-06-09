@@ -28,9 +28,9 @@ public enum MenuDispatcher {
 
 		switch (user) {
 			case Guest _ -> new GuestMenu().run();
-			case Member _ -> new MemberMenu().run();
-			case TicketsClerk _ -> new TicketsClerkMenu().run();
-			case Projectionist _ -> new ProjectionistMenu().run();
+			case Member _ -> new MemberMenu(user).run();
+			case TicketsClerk _ -> new TicketsClerkMenu(user).run();
+			case Projectionist _ -> new ProjectionistMenu(user).run();
 		};
 	}
 }
