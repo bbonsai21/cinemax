@@ -41,7 +41,7 @@ public class GuestMenu extends UserMenu {
                 choice.action().run();
             } catch (LogoutException e) {
                 Displayer.cleanScreen();
-                Displayer.body( Message.get("menu.guest.logout.successful"));
+                Displayer.body(Message.get("menu.guest.logout.successful"));
                 Input.awaitInput();
             }
         }

@@ -2,11 +2,12 @@ package tui.UserMenu;
 
 import java.util.ArrayList;
 
+import model.user.User;
 import tui.MenuEntry;
 
-public class ProjectionistMenu extends UserMenu {
-    public ProjectionistMenu()
-    { super(); }
+public final class ProjectionistMenu extends LoggedUserMenu {
+    public ProjectionistMenu( User user )
+    { super( user ); }
 
     protected ArrayList<MenuEntry> buildEntries() {
         ArrayList<MenuEntry> entries = new ArrayList<>();
