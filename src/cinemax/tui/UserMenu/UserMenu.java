@@ -3,8 +3,7 @@ package tui.UserMenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import exception.LogoutException;
-import service.AuthService;
+import repository.FilePaths;
 import tui.Displayer;
 import tui.ExitHandler;
 import tui.Input;
@@ -18,7 +17,7 @@ public abstract class UserMenu implements Runnable {
     protected ArrayList<MenuEntry> entries;
 
     protected UserMenu() {
-        entries = buildEntries();
+        this.entries = buildEntries();
     }
 
     /**
@@ -61,6 +60,8 @@ public abstract class UserMenu implements Runnable {
         Displayer.section(Message.get("menu.extra.section.credits"));
         Displayer.body(Message.get("menu.extra.developer", "https://github.com/bbonsai21"));
 
+        Displayer.fromFile(FilePaths.ABSOLUTE_CINEMAX.getPath(), null);
+
         Displayer.body(Message.get("message.await.enter"));
         Input.awaitInput();
 
@@ -68,7 +69,7 @@ public abstract class UserMenu implements Runnable {
 
         Displayer.title("Cinemax");
         Displayer.section(Message.get("menu.extra.section.license"));
-        Displayer.fromFile("LICENSE.txt",
+        Displayer.fromFile(FilePaths.LICENSE.getPath(),
                 "There was an error displaying the license.\nYou can still check it in the project's root folder file LICENSE.txt");
 
         Displayer.body(Message.get("message.await.enter"));
@@ -80,15 +81,5 @@ public abstract class UserMenu implements Runnable {
                 new MenuEntry(Message.get("menu.language.change"), this::changeLanguage),
                 new MenuEntry(Message.get("menu.extra"), this::displayExtraInfo),
                 new MenuEntry(Message.get("menu.quit"), ExitHandler::promptAndExit)));
-    }
-
-    protected ArrayList<MenuEntry> getSharedLoggedEntries() {
-        return new ArrayList<>(List.of(
-                new MenuEntry("menu.logout", this::logout)));
-    }
-
-    private void logout() throws LogoutException {
-        AuthService.INSTANCE.logout();
-        throw new LogoutException();
     }
 }
