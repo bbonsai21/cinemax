@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 public enum FilePaths {
 	PROJECTIONS("proiezioni.csv"),
 	USERS("users.csv"),
-	USER_BOOKINGS("user_bookings.csv");
+	USER_BOOKINGS("user_bookings.csv"),
+	LICENSE( "LICENSE.txt" ),
+	ABSOLUTE_CINEMAX( "absolute_cinemax.txt" );
 
 	private final String filename;
 
