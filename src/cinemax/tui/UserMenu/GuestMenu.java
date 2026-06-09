@@ -12,6 +12,7 @@ import service.AuthService.LoginResult;
 import service.SignupValidation;
 import tui.Displayer;
 import tui.Input;
+import tui.MenuDispatcher;
 import tui.MenuEntry;
 import tui.Message;
 
@@ -30,17 +31,21 @@ public class GuestMenu extends UserMenu {
     }
 
     public void run() {
-        while (true) {
-            try {
-                Displayer.cleanScreen();
+        try {
+            while (true) {
+                try {
+                    Displayer.cleanScreen();
 
-                Displayer.title("GUEST");
+                    Displayer.title("GUEST");
 
-                MenuEntry choice = Input.choose(this.entries); // entries inherited from UserMenu
-                choice.action().run();
-            } catch (LogoutException e) {
-                continue;
+                    MenuEntry choice = Input.choose(this.entries); // entries inherited from UserMenu
+                    choice.action().run();
+                } catch (LogoutException e) {
+                    continue;
+                }
             }
+        } catch (LogoutException e) {
+            Displayer.body(Message.get("menu.guest.logoutexception.message"));
         }
     }
 
@@ -170,19 +175,16 @@ public class GuestMenu extends UserMenu {
         String name, surname;
         User user;
 
-        // of course on a real project we'd simply be making a request to a server that
-        // stores all the logins
-        // and act from there; this is a simulation, we don't care about the fact that
-        // irl this would make no sense lol; we store everything in the same filesystem,
-        // here.
-        if (loginResult.successful()) {
-            user = loginResult.user();
-            name = loginResult.name();
-            surname = loginResult.surname();
-        } else {
+        if (!loginResult.successful()) {
             Displayer.body(Message.get("menu.guest.login.failed"));
             Input.awaitInput();
             return;
         }
+
+        user = loginResult.user();
+        name = loginResult.name();
+        surname = loginResult.surname();
+
+        MenuDispatcher.INSTANCE.dispatch(user);
     }
 }
