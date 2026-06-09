@@ -10,7 +10,7 @@ public class ExitHandler implements Runnable {
      * Prompts the user to exit. If positive, closes application.
      */
     public static void promptAndExit() {
-        String input = Input.INSTANCE.readLine( "exit.prompt" );
+        String input = Input.readLine( Message.get( "exit.prompt" ) );
         if ( input.toLowerCase().strip().equals( Message.get( "exit.confirm.yes" ).toLowerCase().strip() ) ) {
             IO.println( "Au revoir!" );
             System.exit( 0 );
