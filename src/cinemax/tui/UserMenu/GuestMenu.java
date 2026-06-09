@@ -31,21 +31,19 @@ public class GuestMenu extends UserMenu {
     }
 
     public void run() {
-        try {
-            while (true) {
-                try {
-                    Displayer.cleanScreen();
+        while (true) {
+            try {
+                Displayer.cleanScreen();
 
-                    Displayer.title("GUEST");
+                Displayer.title("GUEST");
 
-                    MenuEntry choice = Input.choose(this.entries); // entries inherited from UserMenu
-                    choice.action().run();
-                } catch (LogoutException e) {
-                    continue;
-                }
+                MenuEntry choice = Input.choose(this.entries); // entries inherited from UserMenu
+                choice.action().run();
+            } catch (LogoutException e) {
+                Displayer.cleanScreen();
+                Displayer.body( Message.get("menu.guest.logout.successful"));
+                Input.awaitInput();
             }
-        } catch (LogoutException e) {
-            Displayer.body(Message.get("menu.guest.logoutexception.message"));
         }
     }
 
